@@ -78,11 +78,7 @@ namespace epamLabs
         {
             if (Length + elements.Length < Capacity)
             {
-                /*for (int i = 0; i < elements.Length; i++)
-                {
-                    array[Length] = elements[i];
-                    Length++;
-                }*/
+
                 elements.CopyTo(array, this.Length);
                 Length += elements.Length;
             }
@@ -102,14 +98,6 @@ namespace epamLabs
                 {
                     Length--;
                     T[] localArr = new T[Capacity];//массив с тем же capacity
-                    /*for (int j = 0; j < i; j++)//добавляем элементы до первого вхождения
-                    {
-                        localArr[j] = array[j];
-                    }
-                    for (int j = i + 1; j < Length + 1; j++)//добавляем элементы поле вхождения
-                    {
-                        localArr[j - 1] = array[j];
-                    }*/
                     Array.Copy(array, 0, localArr, 0, i);
                     Array.Copy(array, i + 1, localArr, i, this.Length - i);
                     array = localArr;
@@ -196,23 +184,32 @@ namespace epamLabs
             }
         }
         //делегаты
-        public void Filter(Func<T, bool> isRight) {
-            int last_index=0;
+        public void Filter(Func<T, bool> isRight)
+        {
+            int last_index = 0;
+            int initLength = this.Length;
             for (int i = 0; i < this.Length; i++)
             {
-                if (isRight(array[i])) {
-                    array[last_index] = array[i];
+                if (isRight(array[i]))
+                {
+                    array[last_index] = array[i];//сдвиг влево
                     last_index++;
                 }
             }
-            for (int i = last_index+1; i < this.Length; i++)
+            //много раз удаляем элемент после оставшегося массива, т.к. при удалении все значеня справа сдвигаются на 1 влево
+            for (int i = last_index; i < initLength; i++)                                             
             {
-                array[i] = default;
+                this.RemoveAt(last_index);
             }
-            this.Length = ++last_index;
         }
-
-
+        public void RemoveAt(int pos) //Удаление по индексу
+        {
+            Length--;
+            T[] localArr = new T[Capacity];
+            Array.Copy(array, 0, localArr, 0, pos);
+            Array.Copy(array, pos + 1, localArr, pos, this.Length - pos);
+            array = localArr;
+        }
 
         public void Sort(Func<T,T,int> compare) {
             for (int i = 0; i < this.Length; i++)
