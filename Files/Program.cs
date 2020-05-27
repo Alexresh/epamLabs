@@ -8,13 +8,12 @@ namespace Files
     {
         static void Main(string[] args)
         {
-            string text;
-            text = ReadAllFile("disposable_task_file.txt");
+            var allText = File.ReadAllLines("disposable_task_file.txt");
             try
             {
                 using (StreamWriter sw = new StreamWriter("disposable_task_file.txt"))
                 {
-                    foreach (var num in text.Split('\n'))
+                    foreach (var num in allText)
                     {
                         sw.WriteLine(Math.Pow(int.Parse(num), 2));
                     }
@@ -27,33 +26,33 @@ namespace Files
             catch (Exception ex) {
                 PrintEx(ex.Message);
             }
-
-            string path = @"C:\temp\";
-            Directory.CreateDirectory(path + "K1");
-            WriteFile(path + @"K1\t1.txt", "Иванов Иван Иванович, 2000 года рождения, место жительства г. Рязань", false);
-            WriteFile(path + @"K1\t2.txt", "Петров Сергей Федорович, 2002 года рождения, место жительства г. Бежицк", false);
-            Directory.CreateDirectory(path + @"K2");
-            text = ReadAllFile(path + @"K1\t1.txt");
-            WriteFile(path + @"K2\t3.txt", text, false);
-            text = ReadAllFile(path + @"K1\t2.txt");
-            WriteFile(path + @"K2\t3.txt", text, true);
-            AllInfoAboutFile(path + @"K1\t1.txt");
-            AllInfoAboutFile(path + @"K1\t2.txt");
-            AllInfoAboutFile(path + @"K2\t3.txt");
+            string text = "";
+            string path = @"C:\temp";
+            Directory.CreateDirectory(Path.Combine(path,"K1"));
+            WriteFile(Path.Combine(path,"K1","t1.txt"), "Иванов Иван Иванович, 2000 года рождения, место жительства г. Рязань", false);
+            WriteFile(Path.Combine(path,"K1","t2.txt"), "Петров Сергей Федорович, 2002 года рождения, место жительства г. Бежицк", false);
+            Directory.CreateDirectory(Path.Combine(path,"K2"));
+            text = ReadAllFile(Path.Combine(path,"K1","t1.txt"));
+            WriteFile(Path.Combine(path,"K2","t3.txt"), text, false);
+            text = ReadAllFile(Path.Combine(path,"K1","t2.txt"));
+            WriteFile(Path.Combine(path,"K2","t3.txt"), text, true);
+            AllInfoAboutFile(Path.Combine(path,"K1","t1.txt"));
+            AllInfoAboutFile(Path.Combine(path,"K1","t2.txt"));
+            AllInfoAboutFile(Path.Combine(path,"K2","t3.txt"));
             try
             {
-                if (!File.Exists(path + @"K2\t2.txt") && File.Exists(path + @"K1\t2.txt"))
-                    File.Move(path + @"K1\t2.txt", path + @"K2\t2.txt");
-                if (!File.Exists(path + @"K2\t1.txt") && File.Exists(path + @"K1\t1.txt"))
-                    File.Copy(path + @"K1\t1.txt", path + @"K2\t1.txt");
-                Directory.Move(path + "K2", path + "All");
-                Directory.Delete(path + "K1", true);
+                if (!File.Exists(Path.Combine(path, "K2", "t2.txt")) && File.Exists(Path.Combine(path,"K1","t2.txt")))
+                    File.Move(Path.Combine(path, "K1", "t2.txt"), Path.Combine(path, "K2", "t2.txt"));
+                if (!File.Exists(Path.Combine(path, "K2", "t1.txt")) && File.Exists(Path.Combine(path, "K1", "t1.txt")))
+                    File.Copy(Path.Combine(path, "K1", "t1.txt"), Path.Combine(path, "K2", "t1.txt"));
+                Directory.Move(Path.Combine(path, "K2"), Path.Combine(path, "All"));
+                Directory.Delete(Path.Combine(path, "K1"), true);
             }
             catch (Exception e)
             {
                 PrintEx(e.Message + "Некоторые операции возможно не завершились, исправьте ошибку и повторите попытку");
             }
-            foreach (var file in Directory.EnumerateFiles(path + "All"))
+            foreach (var file in Directory.EnumerateFiles(Path.Combine(path, "All")))
             {
                 AllInfoAboutFile(file);
             }

@@ -22,7 +22,7 @@ namespace Events
         private void OnCameHandler(Person p, DateTime time)
         {
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("--Сотрудник " + p.Name + " пришёл");
+            Console.WriteLine($"--Сотрудник {p.Name} пришёл");
             allHello?.Invoke(p, time);
 
             allHello += p.SayHello;
@@ -32,7 +32,7 @@ namespace Events
         private void OnLeaveHandler(Person p)
         {
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine("--Сотрудник " + p.Name + " ушёл");
+            Console.WriteLine($"--Сотрудник {p.Name} ушёл");
             allHello -= p.SayHello;
             allBye -= p.SayBye;
             allBye?.Invoke(p);

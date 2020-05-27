@@ -22,23 +22,23 @@ namespace Events
             string dayPart;
             if (time.Hour < 12)
             {
-                dayPart = "Доброе утро, ";
+                dayPart = "Доброе утро";
             }
             else if (time.Hour < 17)
             {
-                dayPart = "Добрый день, ";
+                dayPart = "Добрый день";
             }
             else
             {
-                dayPart = "Добрый вечер, ";
+                dayPart = "Добрый вечер";
             }
 
-            Console.WriteLine('[' + this.Name + "]: " + dayPart + p.Name);
+            Console.WriteLine($"[{this.Name}]:{dayPart}, {p.Name}");
         }
         public void SayBye(Person p)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Пока, " + p.Name + ", сказал " + this.Name);
+            Console.WriteLine($"Пока, {p.Name}, сказал {this.Name}");
         }
     }
 }

@@ -78,20 +78,19 @@ namespace epamLabs
         {
             if (Length + elements.Length < Capacity)
             {
-                for (int i = 0; i < elements.Length; i++)
+                /*for (int i = 0; i < elements.Length; i++)
                 {
                     array[Length] = elements[i];
                     Length++;
-                }
+                }*/
+                elements.CopyTo(array, this.Length);
+                Length += elements.Length;
             }
             else
             {
                 AddCapacity(elements.Length-(Capacity-Length));
-                for (int i = 0; i < elements.Length; i++)
-                {
-                    array[Length] = elements[i];
-                    Length++;
-                }
+                elements.CopyTo(array, this.Length);
+                Length += elements.Length;
             }
 
         }
@@ -103,14 +102,16 @@ namespace epamLabs
                 {
                     Length--;
                     T[] localArr = new T[Capacity];//массив с тем же capacity
-                    for (int j = 0; j < i; j++)//добавляем элементы до первого вхождения
+                    /*for (int j = 0; j < i; j++)//добавляем элементы до первого вхождения
                     {
                         localArr[j] = array[j];
                     }
                     for (int j = i + 1; j < Length + 1; j++)//добавляем элементы поле вхождения
                     {
                         localArr[j - 1] = array[j];
-                    }
+                    }*/
+                    Array.Copy(array, 0, localArr, 0, i);
+                    Array.Copy(array, i + 1, localArr, i, this.Length - i);
                     array = localArr;
                     return true;
                 }
@@ -196,20 +197,27 @@ namespace epamLabs
         }
         //делегаты
         public void Filter(Func<T, bool> isRight) {
-            for (int i = 0; i < array.Length; i++)
+            int last_index=0;
+            for (int i = 0; i < this.Length; i++)
             {
-                if (!isRight(array[i])) {
-                    array[i] = default;
+                if (isRight(array[i])) {
+                    array[last_index] = array[i];
+                    last_index++;
                 }
             }
+            for (int i = last_index+1; i < this.Length; i++)
+            {
+                array[i] = default;
+            }
+            this.Length = ++last_index;
         }
 
 
 
         public void Sort(Func<T,T,int> compare) {
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < this.Length; i++)
             {
-                for (int j = 0; j < array.Length; j++)
+                for (int j = 0; j < this.Length; j++)
                 {
                     if (compare(array[i], array[j]) == 1) {
                         T temp = array[i];

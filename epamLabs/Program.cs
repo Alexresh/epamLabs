@@ -30,10 +30,11 @@ namespace epamLabs
             a.Remove(120);
             Console.WriteLine(a.ToString());
             if (!a.Remove(90)) Console.WriteLine("Элемента нет");
+            a.Filter((o) => o > 2);
+            Console.WriteLine(a.ToString());
             a.Sort(a.compareTwoInt);
             Console.WriteLine(a.ToString());
-            a.Filter((o) => o>10);
-            Console.WriteLine(a.ToString());
+
             Console.ReadKey();
             
             
