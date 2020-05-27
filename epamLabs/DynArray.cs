@@ -186,20 +186,13 @@ namespace epamLabs
         //делегаты
         public void Filter(Func<T, bool> isRight)
         {
-            int last_index = 0;
-            int initLength = this.Length;
-            for (int i = 0; i < this.Length; i++)
+            for (int i = 0; i < Length; i++)
             {
-                if (isRight(array[i]))
+                if (!isRight(array[i]))
                 {
-                    array[last_index] = array[i];//сдвиг влево
-                    last_index++;
+                    Remove(array[i]);
+                    i--;
                 }
-            }
-            //много раз удаляем элемент после оставшегося массива, т.к. при удалении все значеня справа сдвигаются на 1 влево
-            for (int i = last_index; i < initLength; i++)                                             
-            {
-                this.RemoveAt(last_index);
             }
         }
         public void RemoveAt(int pos) //Удаление по индексу
